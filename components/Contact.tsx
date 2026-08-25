@@ -77,7 +77,7 @@ export default function Contact() {
                   </p>
 
                   <p className="text-lg text-gray-200">
-                    Bhopal, Madhya Pradesh
+                    Buxar Bihar, India
                   </p>
                 </div>
               </div>
