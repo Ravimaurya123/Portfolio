@@ -8,6 +8,7 @@ import Contribution from "@/components/Contribution";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import GlowingParticles from "@/components/GlowingParticles";
+import Achievements from "@/components/Achievements";
 
 export default function Home() {
   return (
@@ -24,6 +25,7 @@ export default function Home() {
           {/* <Skills /> */}
           <Projects />
           <Contribution/>
+          <Achievements />
           <Contact />
         </main>
 

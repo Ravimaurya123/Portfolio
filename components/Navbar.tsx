@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const navItems = [
+  
   { name: "Home", id: "home" },
   { name: "About", id: "about" },
   { name: "Contributions", id: "contributions" },
