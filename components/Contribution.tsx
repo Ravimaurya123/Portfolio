@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type Day = {
   date: string;
@@ -14,12 +10,8 @@ type Day = {
 type Stats = {
   total: number;
   days: Day[];
-
-  // GitHub
   dayStreak?: number;
   activeDays?: number;
-
-  // LeetCode
   globalRank?: number;
   solvedQuestions?: number;
 };
@@ -32,50 +24,43 @@ const emptyStats: Stats = {
 };
 
 /* =========================================================
-   LEVEL COLORS
+   CONTRIBUTION LEVEL
 ========================================================= */
 
-function getLevel(
-  count: number,
-  platform: Platform
-) {
+function getLevel(count: number, platform: Platform) {
   if (count === 0) {
     return "bg-white/[0.035] border-white/[0.05]";
   }
 
-  /* LEETCODE - GREEN */
-
   if (platform === "leetcode") {
-    if (count <= 1) {
-      return "bg-green-950 border-green-900/50";
+    if (count >= 8) {
+      return "bg-green-400 border-green-300/70";
     }
 
-    if (count <= 3) {
-      return "bg-green-800/70 border-green-700/60";
+    if (count >= 5) {
+      return "bg-green-500/80 border-green-400/60";
     }
 
-    if (count <= 6) {
-      return "bg-green-600/80 border-green-500/60";
+    if (count >= 3) {
+      return "bg-green-500/50 border-green-400/40";
     }
 
-    return "bg-green-400 border-green-300 shadow-[0_0_10px_rgba(74,222,128,0.5)]";
+    return "bg-green-500/25 border-green-400/25";
   }
 
-  /* GITHUB - CYAN */
-
-  if (count <= 2) {
-    return "bg-cyan-950 border-cyan-900/50";
+  if (count >= 8) {
+    return "bg-cyan-400 border-cyan-300/70";
   }
 
-  if (count <= 5) {
-    return "bg-cyan-800/70 border-cyan-700/60";
+  if (count >= 5) {
+    return "bg-cyan-500/80 border-cyan-400/60";
   }
 
-  if (count <= 10) {
-    return "bg-cyan-600/80 border-cyan-500/60";
+  if (count >= 3) {
+    return "bg-cyan-500/50 border-cyan-400/40";
   }
 
-  return "bg-cyan-400 border-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.5)]";
+  return "bg-cyan-500/25 border-cyan-400/25";
 }
 
 /* =========================================================
@@ -83,9 +68,9 @@ function getLevel(
 ========================================================= */
 
 function formatDate(date: string) {
-  return new Date(
-    `${date}T00:00:00`
-  ).toLocaleDateString("en-US", {
+  const d = new Date(`${date}T00:00:00`);
+
+  return d.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -97,15 +82,11 @@ function formatDate(date: string) {
 ========================================================= */
 
 function formatNumber(value?: number) {
-  if (
-    value === undefined ||
-    value === null ||
-    Number.isNaN(value)
-  ) {
-    return "0";
+  if (value === undefined || value === null) {
+    return "—";
   }
 
-  return value.toLocaleString("en-US");
+  return value.toLocaleString();
 }
 
 /* =========================================================
@@ -116,9 +97,11 @@ function GithubIcon() {
   return (
     <svg
       viewBox="0 0 24 24"
-      className="h-5 w-5 fill-current"
+      fill="currentColor"
+      className="h-5 w-5"
+      aria-hidden="true"
     >
-      <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2.17c-3.2.69-3.87-1.54-3.87-1.54-.53-1.34-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.02 1.75 2.68 1.25 3.33.96.1-.74.4-1.25.73-1.54-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.47.11-3.06 0 0 .96-.31 3.15 1.18A10.9 10.9 0 0 1 12 6.34c.97 0 1.94.13 2.85.38 2.18-1.49 3.14-1.18 3.14-1.18.62 1.59.23 2.77.12 3.06.73.81 1.18 1.84 1.18 3.1 0 4.42-2.69 5.4-5.25 5.68.41.35.78 1.04.78 2.1v3.11c0 .31.21.68.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z" />
+      <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.4 7.86 10.93.57.1.78-.25.78-.55v-2.15c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.27-1.68-1.27-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.67 1.24 3.32.95.1-.74.4-1.24.73-1.53-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.58.23 2.75.11 3.04.73.81 1.18 1.84 1.18 3.1 0 4.42-2.69 5.39-5.25 5.67.41.35.78 1.04.78 2.1v3.12c0 .3.2.66.79.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z" />
     </svg>
   );
 }
@@ -129,9 +112,9 @@ function GithubIcon() {
 
 function LeetCodeIcon() {
   return (
-    <span className="text-sm font-black">
+    <div className="flex h-5 w-5 items-center justify-center rounded-sm border border-green-400/50 text-[9px] font-bold text-green-400">
       LC
-    </span>
+    </div>
   );
 }
 
@@ -149,290 +132,226 @@ function ContributionCalendar({
   const calendar = useMemo(() => {
     const today = new Date();
 
-    /*
-      Last 365 days
-    */
+    today.setHours(0, 0, 0, 0);
 
-    const start = new Date(today);
+    const endDate = new Date(today);
 
-    start.setDate(
-      today.getDate() - 364
-    );
+    const startDate = new Date(today);
+    startDate.setDate(startDate.getDate() - 364);
 
-    /*
-      Start calendar from Sunday
-    */
+    const firstDay = new Date(startDate);
 
-    start.setDate(
-      start.getDate() - start.getDay()
-    );
-
-    const map = new Map(
-      days.map((day) => [
-        day.date,
-        day.count,
-      ])
+    firstDay.setDate(
+      firstDay.getDate() - firstDay.getDay()
     );
 
     const weeks: Day[][] = [];
 
-    let current = new Date(start);
+    const dateMap = new Map<string, number>();
 
-    /*
-      53 weeks
-    */
+    days.forEach((day) => {
+      dateMap.set(day.date, day.count);
+    });
 
-    for (
-      let week = 0;
-      week < 53;
-      week++
-    ) {
-      const currentWeek: Day[] = [];
+    const current = new Date(firstDay);
 
-      for (
-        let day = 0;
-        day < 7;
-        day++
-      ) {
-        const date = current
-          .toISOString()
-          .split("T")[0];
+    while (current <= endDate || weeks.length < 53) {
+      const week: Day[] = [];
 
-        currentWeek.push({
-          date,
-          count:
-            map.get(date) ?? 0,
+      for (let i = 0; i < 7; i++) {
+        const dateString =
+          current.toISOString().split("T")[0];
+
+        week.push({
+          date: dateString,
+          count: dateMap.get(dateString) ?? 0,
         });
 
-        current.setDate(
-          current.getDate() + 1
-        );
+        current.setDate(current.getDate() + 1);
       }
 
-      weeks.push(currentWeek);
+      weeks.push(week);
+
+      if (weeks.length >= 53 && current > endDate) {
+        break;
+      }
     }
 
-    return weeks;
+    return weeks.slice(0, 53);
   }, [days]);
 
-  /* =======================================================
-     MONTH + YEAR LABELS
-  ======================================================= */
+  /* =====================================================
+     MONTH LABELS
+  ===================================================== */
 
   const monthLabels = useMemo(() => {
     const labels: {
       name: string;
-      year: number;
       week: number;
     }[] = [];
 
-    let previousMonth = -1;
-    let previousYear = -1;
+    let lastMonth = "";
 
-    calendar.forEach(
-      (week, index) => {
-        const date = new Date(
-          `${week[0].date}T00:00:00`
-        );
+    calendar.forEach((week, index) => {
+      const firstDay = week[0];
 
-        const month =
-          date.getMonth();
+      const date = new Date(
+        `${firstDay.date}T00:00:00`
+      );
 
-        const year =
-          date.getFullYear();
+      const month = date.toLocaleDateString("en-US", {
+        month: "short",
+      });
 
-        if (
-          month !== previousMonth ||
-          year !== previousYear
-        ) {
-          labels.push({
-            name:
-              date.toLocaleDateString(
-                "en-US",
-                {
-                  month: "short",
-                }
-              ),
+      if (month !== lastMonth) {
+        labels.push({
+          name: month,
+          week: index,
+        });
 
-            year,
-
-            week: index,
-          });
-
-          previousMonth = month;
-          previousYear = year;
-        }
+        lastMonth = month;
       }
-    );
+    });
 
     return labels;
   }, [calendar]);
 
-  const isGithub =
-    platform === "github";
-
   return (
-    <div className="w-full overflow-x-auto pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-cyan-500/20">
-      <div className="min-w-[950px]">
+    <div className="w-full">
+      {/* =================================================
+          MONTH HEADER
+      ================================================= */}
 
-        {/* =================================================
-            MONTH + YEAR
-        ================================================= */}
+      <div className="relative ml-[38px] h-6 w-[calc(100%-38px)]">
+        {monthLabels.map((month, index) => (
+          <span
+            key={`${month.name}-${index}`}
+            className="absolute text-[10px] font-medium text-white/35"
+            style={{
+              left: `${(month.week / 53) * 100}%`,
+            }}
+          >
+            {month.name}
+          </span>
+        ))}
+      </div>
 
-        <div className="relative ml-[50px] h-10">
+      {/* =================================================
+          GRAPH
+      ================================================= */}
 
-          {monthLabels.map(
-            (month, index) => (
-              <div
-                key={`${month.name}-${month.year}-${index}`}
-                className="absolute whitespace-nowrap"
-                style={{
-                  left: `${
-                    month.week * 16
-                  }px`,
-                }}
-              >
-                <span className="text-[11px] font-medium text-gray-500">
-                  {month.name}
-                </span>
+      <div className="flex w-full">
+        {/* WEEKDAY LABELS */}
 
-                {/* YEAR */}
-                {(month.name === "Jan" ||
-                  index === 0) && (
-                  <span className="ml-1 text-[9px] text-gray-700">
-                    {month.year}
-                  </span>
-                )}
-              </div>
-            )
-          )}
+        <div className="mr-2 flex w-[30px] shrink-0 flex-col justify-between py-[1px]">
+          <span className="text-[9px] text-white/25">
+            Sun
+          </span>
 
+          <span className="text-[9px] text-white/25">
+            Mon
+          </span>
+
+          <span className="text-[9px] text-white/25">
+            Tue
+          </span>
+
+          <span className="text-[9px] text-white/25">
+            Wed
+          </span>
+
+          <span className="text-[9px] text-white/25">
+            Thu
+          </span>
+
+          <span className="text-[9px] text-white/25">
+            Fri
+          </span>
+
+          <span className="text-[9px] text-white/25">
+            Sat
+          </span>
         </div>
 
         {/* =================================================
-            WEEK DAYS + GRAPH
+            FULL WIDTH CONTRIBUTION GRAPH
         ================================================= */}
 
-        <div className="flex">
-
-          {/* WEEK DAYS */}
-
-          <div className="mr-3 flex w-[35px] shrink-0 flex-col justify-between py-[1px] text-[10px] text-gray-600">
-            <span>Sun</span>
-            <span>Mon</span>
-            <span>Tue</span>
-            <span>Wed</span>
-            <span>Thu</span>
-            <span>Fri</span>
-            <span>Sat</span>
-          </div>
-
-          {/* CONTRIBUTION GRID */}
-
-          <div className="flex gap-[3px]">
-
-            {calendar.map(
-              (week, weekIndex) => (
+        <div className="flex flex-1 justify-between gap-[2px]">
+          {calendar.map((week, weekIndex) => (
+            <div
+              key={weekIndex}
+              className="flex flex-1 flex-col gap-[2px]"
+            >
+              {week.map((day) => (
                 <div
-                  key={weekIndex}
-                  className="flex flex-col gap-[3px]"
-                >
-                  {week.map(
-                    (day) => (
-                      <div
-                        key={day.date}
-                        title={`${day.count} ${
-                          isGithub
-                            ? "contributions"
-                            : "submissions"
-                        } on ${formatDate(
-                          day.date
-                        )}`}
-                        className={`
-                          h-[13px]
-                          w-[13px]
-                          shrink-0
-                          rounded-[3px]
-                          border
-                          transition-all
-                          duration-200
-                          hover:z-20
-                          hover:scale-125
+                  key={day.date}
+                  title={`${formatDate(day.date)} • ${
+                    day.count
+                  } contribution${
+                    day.count === 1 ? "" : "s"
+                  }`}
+                  className={[
+                    "h-[10px]",
+                    "w-full",
+                    "min-w-[3px]",
+                    "shrink-0",
+                    "rounded-[2px]",
+                    "border",
+                    "transition-all",
+                    "duration-200",
+                    "hover:z-20",
+                    "hover:scale-125",
+                    platform === "github"
+                      ? "hover:border-cyan-300 hover:shadow-[0_0_10px_rgba(34,211,238,0.7)]"
+                      : "hover:border-green-300 hover:shadow-[0_0_10px_rgba(74,222,128,0.7)]",
+                    getLevel(day.count, platform),
+                  ].join(" ")}
+                />
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
 
-                          ${
-                            isGithub
-                              ? `
-                                hover:border-cyan-300
-                                hover:shadow-[0_0_12px_rgba(34,211,238,0.8)]
-                              `
-                              : `
-                                hover:border-green-300
-                                hover:shadow-[0_0_12px_rgba(74,222,128,0.8)]
-                              `
-                          }
+      {/* =================================================
+          LEGEND
+      ================================================= */}
 
-                          ${getLevel(
-                            day.count,
-                            platform
-                          )}
-                        `}
-                      />
-                    )
-                  )}
-                </div>
-              )
-            )}
+      <div className="mt-3 flex items-center justify-end gap-2">
+        <span className="text-[9px] text-white/25">
+          Less
+        </span>
 
-          </div>
+        <div className="flex gap-[2px]">
+          {[0, 1, 3, 5, 8].map((count) => (
+            <div
+              key={count}
+              className={[
+                "h-[10px]",
+                "w-[11px]",
+                "rounded-[2px]",
+                "border",
+                getLevel(count, platform),
+              ].join(" ")}
+            />
+          ))}
         </div>
 
-        {/* =================================================
-            LEGEND
-        ================================================= */}
-
-        <div className="mt-5 flex items-center justify-end gap-2 text-[11px] text-gray-500">
-
-          <span>Less</span>
-
-          <div className="h-[13px] w-[13px] rounded-[3px] border border-white/[0.05] bg-white/[0.035]" />
-
-          {isGithub ? (
-            <>
-              <div className="h-[13px] w-[13px] rounded-[3px] border border-cyan-900/50 bg-cyan-950" />
-
-              <div className="h-[13px] w-[13px] rounded-[3px] border border-cyan-700/60 bg-cyan-800/70" />
-
-              <div className="h-[13px] w-[13px] rounded-[3px] border border-cyan-500/60 bg-cyan-600/80" />
-
-              <div className="h-[13px] w-[13px] rounded-[3px] border border-cyan-300 bg-cyan-400" />
-            </>
-          ) : (
-            <>
-              <div className="h-[13px] w-[13px] rounded-[3px] border border-green-900/50 bg-green-950" />
-
-              <div className="h-[13px] w-[13px] rounded-[3px] border border-green-700/60 bg-green-800/70" />
-
-              <div className="h-[13px] w-[13px] rounded-[3px] border border-green-500/60 bg-green-600/80" />
-
-              <div className="h-[13px] w-[13px] rounded-[3px] border border-green-300 bg-green-400" />
-            </>
-          )}
-
-          <span>More</span>
-
-        </div>
+        <span className="text-[9px] text-white/25">
+          More
+        </span>
       </div>
     </div>
   );
 }
 
 /* =========================================================
-   MAIN CONTRIBUTION COMPONENT
+   MAIN COMPONENT
 ========================================================= */
 
 export default function Contribution() {
-
-  const [activeTab, setActiveTab] =
+  const [activePlatform, setActivePlatform] =
     useState<Platform>("github");
 
   const [github, setGithub] =
@@ -441,19 +360,24 @@ export default function Contribution() {
   const [leetcode, setLeetcode] =
     useState<Stats>(emptyStats);
 
-  const [githubLoading, setGithubLoading] =
+  const [loading, setLoading] =
     useState(true);
 
-  const [leetcodeLoading, setLeetcodeLoading] =
-    useState(true);
+  const [error, setError] =
+    useState<string | null>(null);
 
-  /* =======================================================
-     FETCH LIVE DATA
-  ======================================================= */
+  /* =====================================================
+     FETCH DATA
+  ===================================================== */
 
   useEffect(() => {
-    async function loadData() {
+    let mounted = true;
+
+    async function fetchData() {
       try {
+        setLoading(true);
+        setError(null);
+
         const [
           githubResponse,
           leetcodeResponse,
@@ -467,400 +391,303 @@ export default function Contribution() {
           }),
         ]);
 
-        const githubData =
+        if (!githubResponse.ok) {
+          throw new Error(
+            `GitHub API failed: ${githubResponse.status}`
+          );
+        }
+
+        if (!leetcodeResponse.ok) {
+          throw new Error(
+            `LeetCode API failed: ${leetcodeResponse.status}`
+          );
+        }
+
+        const githubData: Stats =
           await githubResponse.json();
 
-        const leetcodeData =
+        const leetcodeData: Stats =
           await leetcodeResponse.json();
 
-        console.log(
-          "GitHub API:",
-          githubData
-        );
-
-        console.log(
-          "LeetCode API:",
-          leetcodeData
-        );
+        if (!mounted) return;
 
         setGithub(githubData);
         setLeetcode(leetcodeData);
-
-      } catch (error) {
+      } catch (err) {
         console.error(
-          "Contribution error:",
-          error
+          "Failed to fetch coding data:",
+          err
+        );
+
+        if (!mounted) return;
+
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Failed to fetch coding data"
         );
       } finally {
-        setGithubLoading(false);
-        setLeetcodeLoading(false);
+        if (mounted) {
+          setLoading(false);
+        }
       }
     }
 
-    loadData();
+    fetchData();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
-  /* =======================================================
-     CURRENT PLATFORM
-  ======================================================= */
+  /* =====================================================
+     ACTIVE DATA
+  ===================================================== */
+
+  const activeStats =
+    activePlatform === "github"
+      ? github
+      : leetcode;
 
   const isGithub =
-    activeTab === "github";
+    activePlatform === "github";
 
-  const currentData = isGithub
-    ? github
-    : leetcode;
-
-  const currentLoading =
-    isGithub
-      ? githubLoading
-      : leetcodeLoading;
-
-  /* =======================================================
+  /* =====================================================
      RENDER
-  ======================================================= */
+  ===================================================== */
 
   return (
     <section
       id="contributions"
-      className="relative w-full scroll-mt-28 px-6 py-24"
+      className="scroll-mt-28 px-6 py-14 md:py-16"
     >
-
-      {/* BACKGROUND GLOW */}
-
-      <div
-        className={`pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[450px] w-[850px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[140px] ${
-          isGithub
-            ? "bg-cyan-500/5"
-            : "bg-green-500/5"
-        }`}
-      />
-
-      <div className="mx-auto max-w-7xl">
-
-        {/* =================================================
-            HEADING
-        ================================================= */}
-
-        <div className="mb-10 text-center">
-
-          <p
-            className={`mb-3 text-sm font-medium uppercase tracking-[0.35em] ${
-              isGithub
-                ? "text-cyan-400"
-                : "text-green-400"
-            }`}
-          >
-            Coding Activity
-          </p>
-
-          <h2 className="text-4xl font-bold tracking-tight text-white md:text-5xl">
-            My Contributions
-          </h2>
-
-          <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-gray-400 md:text-base">
-            Track my real coding activity
-            across GitHub and LeetCode.
-          </p>
-
-        </div>
-
+      <div className="mx-auto w-full max-w-7xl">
         {/* =================================================
             MAIN CARD
         ================================================= */}
 
-        <div className="rounded-3xl border border-white/[0.08] bg-[#050b12]/75 p-5 shadow-[0_0_70px_rgba(8,145,178,0.08)] backdrop-blur-xl md:p-8">
+        <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-transparent p-5 shadow-[0_0_50px_rgba(0,0,0,0.12)] backdrop-blur-xl md:p-7">
+          {/* TOP GLOW */}
 
-          {/* =================================================
-              TABS
-          ================================================= */}
-
-          <div className="mb-10 flex justify-center">
-
-            <div className="flex rounded-xl border border-white/[0.08] bg-black/30 p-1">
-
-              {/* GITHUB */}
-
-              <button
-                type="button"
-                onClick={() =>
-                  setActiveTab("github")
-                }
-                className={`flex items-center gap-2 rounded-lg px-7 py-3 text-sm font-medium transition-all duration-300 ${
-                  isGithub
-                    ? "bg-cyan-400/10 text-cyan-400 shadow-[0_0_25px_rgba(34,211,238,0.08)]"
-                    : "text-gray-500 hover:text-white"
-                }`}
-              >
-                <GithubIcon />
-
-                GitHub
-              </button>
-
-              {/* LEETCODE */}
-
-              <button
-                type="button"
-                onClick={() =>
-                  setActiveTab("leetcode")
-                }
-                className={`flex items-center gap-2 rounded-lg px-7 py-3 text-sm font-medium transition-all duration-300 ${
-                  !isGithub
-                    ? "bg-green-400/10 text-green-400 shadow-[0_0_25px_rgba(74,222,128,0.08)]"
-                    : "text-gray-500 hover:text-white"
-                }`}
-              >
-                <LeetCodeIcon />
-
-                LeetCode
-              </button>
-
-            </div>
-
-          </div>
+          <div
+            className={[
+              "pointer-events-none absolute -top-24 left-1/2 h-48 w-96 -translate-x-1/2 rounded-full blur-3xl",
+              isGithub
+                ? "bg-cyan-400/[0.06]"
+                : "bg-green-400/[0.06]",
+            ].join(" ")}
+          />
 
           {/* =================================================
               HEADER
           ================================================= */}
 
-          <div className="mb-8 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <div className="relative z-10 flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+            {/* TITLE */}
 
             <div>
+              <div className="flex items-center gap-3">
+                <div
+                  className={[
+                    "flex h-9 w-9 items-center justify-center rounded-lg border",
+                    isGithub
+                      ? "border-cyan-400/20 bg-cyan-400/[0.06] text-cyan-400"
+                      : "border-green-400/20 bg-green-400/[0.06] text-green-400",
+                  ].join(" ")}
+                >
+                  {isGithub ? (
+                    <GithubIcon />
+                  ) : (
+                    <LeetCodeIcon />
+                  )}
+                </div>
 
-              <p
-                className={`text-sm uppercase tracking-[0.25em] ${
-                  isGithub
-                    ? "text-cyan-400"
-                    : "text-green-400"
-                }`}
-              >
-                {isGithub
-                  ? "GitHub"
-                  : "LeetCode"}
-              </p>
+                <div>
+                  <h2 className="text-xl font-semibold tracking-tight text-white md:text-2xl">
+                    Coding Contributions
+                  </h2>
 
-              <h3 className="mt-2 text-2xl font-bold text-white md:text-3xl">
-                {isGithub
-                  ? "GitHub Contributions"
-                  : "LeetCode Activity"}
-              </h3>
-
-              <p className="mt-2 text-sm text-gray-500">
-                {isGithub
-                  ? "Last 365 days of GitHub contributions"
-                  : "Daily LeetCode submission activity"}
-              </p>
-
+                  <p className="mt-0.5 text-[11px] text-white/35">
+                    {isGithub
+                      ? "GitHub activity"
+                      : "LeetCode activity"}
+                  </p>
+                </div>
+              </div>
             </div>
 
-            {/* TOTAL */}
+            {/* =================================================
+                PLATFORM SWITCH
+            ================================================= */}
 
-            <div className="text-left md:text-right">
-
-              <p className="text-[10px] uppercase tracking-[0.18em] text-gray-600">
-                Total Activity
-              </p>
-
-              <p
-                className={`mt-1 text-3xl font-bold ${
-                  isGithub
-                    ? "text-cyan-400"
-                    : "text-green-400"
-                }`}
+            <div className="flex w-fit items-center rounded-xl border border-white/[0.08] bg-black/10 p-1 backdrop-blur-md">
+              <button
+                onClick={() =>
+                  setActivePlatform("github")
+                }
+                className={[
+                  "flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-medium transition-all duration-200",
+                  activePlatform === "github"
+                    ? "bg-cyan-400/10 text-cyan-300 shadow-[0_0_20px_rgba(34,211,238,0.08)]"
+                    : "text-white/35 hover:text-white/70",
+                ].join(" ")}
               >
-                {currentLoading
-                  ? "..."
-                  : formatNumber(
-                      currentData.total
-                    )}
-              </p>
+                <GithubIcon />
+                GitHub
+              </button>
 
+              <button
+                onClick={() =>
+                  setActivePlatform("leetcode")
+                }
+                className={[
+                  "flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-medium transition-all duration-200",
+                  activePlatform === "leetcode"
+                    ? "bg-green-400/10 text-green-300 shadow-[0_0_20px_rgba(74,222,128,0.08)]"
+                    : "text-white/35 hover:text-white/70",
+                ].join(" ")}
+              >
+                <LeetCodeIcon />
+                LeetCode
+              </button>
             </div>
-
           </div>
+
+          {/* =================================================
+              ERROR
+          ================================================= */}
+
+          {error && (
+            <div className="relative z-10 mt-5 rounded-xl border border-red-400/10 bg-red-400/[0.04] px-4 py-3 text-xs text-red-300/70">
+              {error}
+            </div>
+          )}
 
           {/* =================================================
               GRAPH
           ================================================= */}
 
-          {currentLoading ? (
-            <div className="flex h-48 items-center justify-center">
+          <div className="relative z-10 mt-7 w-full rounded-2xl border border-white/[0.06] bg-black/[0.08] p-4 backdrop-blur-md md:p-5">
+            {loading ? (
+              <div className="flex h-[105px] items-center justify-center">
+                <div className="flex items-center gap-2 text-xs text-white/30">
+                  <div
+                    className={[
+                      "h-3 w-3 animate-spin rounded-full border-2 border-t-transparent",
+                      isGithub
+                        ? "border-cyan-400"
+                        : "border-green-400",
+                    ].join(" ")}
+                  />
 
-              <div className="flex flex-col items-center gap-3">
-
-                <div
-                  className={`h-6 w-6 animate-spin rounded-full border-2 border-t-transparent ${
-                    isGithub
-                      ? "border-cyan-400"
-                      : "border-green-400"
-                  }`}
-                />
-
-                <p className="text-sm text-gray-500">
-                  Loading{" "}
-                  {isGithub
-                    ? "GitHub"
-                    : "LeetCode"}{" "}
-                  activity...
-                </p>
-
+                  Loading contributions...
+                </div>
               </div>
-
-            </div>
-          ) : currentData.days.length ===
-            0 ? (
-
-            <div className="flex min-h-48 flex-col items-center justify-center gap-2">
-
-              <p className="text-sm text-gray-500">
-                No contribution data found.
-              </p>
-
-              <p className="text-xs text-gray-700">
-                Check your{" "}
-                {isGithub
-                  ? "GitHub"
-                  : "LeetCode"}{" "}
-                API configuration.
-              </p>
-
-            </div>
-
-          ) : (
-
-            <ContributionCalendar
-              days={currentData.days}
-              platform={activeTab}
-            />
-
-          )}
-
-          {/* =================================================
-              STATS FOOTER
-          ================================================= */}
-
-          {!currentLoading &&
-            currentData.days.length > 0 && (
-
-              <div className="mt-10 grid grid-cols-1 gap-3 border-t border-white/[0.06] pt-6 sm:grid-cols-3">
-
-                {/* =================================================
-                    STAT 1 - DAY STREAK
-                ================================================= */}
-
-                <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] px-5 py-4 transition-all duration-300 hover:border-white/[0.12]">
-
-                  <p className="text-[10px] uppercase tracking-[0.18em] text-gray-600">
-                    Total Day Streak
-                  </p>
-
-                  <p
-                    className={`mt-2 text-2xl font-bold ${
-                      isGithub
-                        ? "text-cyan-400"
-                        : "text-green-400"
-                    }`}
-                  >
-                    {formatNumber(
-                      currentData.dayStreak
-                    )}
-
-                    <span className="ml-1 text-xs font-normal text-gray-600">
-                      days
-                    </span>
-                  </p>
-
-                </div>
-
-                {/* =================================================
-                    STAT 2
-                ================================================= */}
-
-                <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] px-5 py-4 transition-all duration-300 hover:border-white/[0.12]">
-
-                  <p className="text-[10px] uppercase tracking-[0.18em] text-gray-600">
-                    {isGithub
-                      ? "Total Contributions"
-                      : "Global Rank"}
-                  </p>
-
-                  <p
-                    className={`mt-2 text-2xl font-bold ${
-                      isGithub
-                        ? "text-cyan-400"
-                        : "text-green-400"
-                    }`}
-                  >
-                    {isGithub
-                      ? formatNumber(
-                          currentData.total
-                        )
-                      : currentData.globalRank
-                        ? `#${formatNumber(
-                            currentData.globalRank
-                          )}`
-                        : "0"}
-                  </p>
-
-                </div>
-
-                {/* =================================================
-                    STAT 3
-                ================================================= */}
-
-                <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] px-5 py-4 transition-all duration-300 hover:border-white/[0.12]">
-
-                  <p className="text-[10px] uppercase tracking-[0.18em] text-gray-600">
-                    {isGithub
-                      ? "Total Active Days"
-                      : "Total Questions"}
-                  </p>
-
-                  <p
-                    className={`mt-2 text-2xl font-bold ${
-                      isGithub
-                        ? "text-cyan-400"
-                        : "text-green-400"
-                    }`}
-                  >
-                    {isGithub
-                      ? formatNumber(
-                          currentData.activeDays
-                        )
-                      : formatNumber(
-                          currentData.solvedQuestions
-                        )}
-                  </p>
-
-                </div>
-
-              </div>
+            ) : (
+              <ContributionCalendar
+                days={activeStats.days}
+                platform={activePlatform}
+              />
             )}
-
-          {/* =================================================
-              BOTTOM STATUS
-          ================================================= */}
-
-          <div className="mt-8 flex items-center justify-between border-t border-white/[0.05] pt-5">
-
-            <span className="text-xs text-gray-700">
-              {isGithub
-                ? "GitHub contribution calendar"
-                : "LeetCode submission calendar"}
-            </span>
-
-            <span
-              className={`rounded-full border px-3 py-1 text-[10px] font-medium tracking-[0.15em] ${
-                isGithub
-                  ? "border-cyan-400/20 bg-cyan-400/5 text-cyan-400"
-                  : "border-green-400/20 bg-green-400/5 text-green-400"
-              }`}
-            >
-              LIVE DATA
-            </span>
-
           </div>
 
+          {/* =================================================
+              STATS
+          ================================================= */}
+
+          <div className="relative z-10 mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+            {/* STAT 1 */}
+
+            <div className="rounded-xl border border-white/[0.06] bg-black/[0.08] px-4 py-3 backdrop-blur-md">
+              <p className="text-[9px] uppercase tracking-[0.18em] text-white/25">
+                Day Streak
+              </p>
+
+              <p
+                className={[
+                  "mt-1 text-lg font-semibold",
+                  isGithub
+                    ? "text-cyan-300"
+                    : "text-green-300",
+                ].join(" ")}
+              >
+                {formatNumber(
+                  activeStats.dayStreak
+                )}
+              </p>
+            </div>
+
+            {/* STAT 2 */}
+
+            <div className="rounded-xl border border-white/[0.06] bg-black/[0.08] px-4 py-3 backdrop-blur-md">
+              <p className="text-[9px] uppercase tracking-[0.18em] text-white/25">
+                {isGithub
+                  ? "Total Contributions"
+                  : "Global Rank"}
+              </p>
+
+              <p
+                className={[
+                  "mt-1 text-lg font-semibold",
+                  isGithub
+                    ? "text-cyan-300"
+                    : "text-green-300",
+                ].join(" ")}
+              >
+                {isGithub
+                  ? formatNumber(activeStats.total)
+                  : formatNumber(
+                      activeStats.globalRank
+                    )}
+              </p>
+            </div>
+
+            {/* STAT 3 */}
+
+            <div className="rounded-xl border border-white/[0.06] bg-black/[0.08] px-4 py-3 backdrop-blur-md">
+              <p className="text-[9px] uppercase tracking-[0.18em] text-white/25">
+                {isGithub
+                  ? "Active Days"
+                  : "Total Questions"}
+              </p>
+
+              <p
+                className={[
+                  "mt-1 text-lg font-semibold",
+                  isGithub
+                    ? "text-cyan-300"
+                    : "text-green-300",
+                ].join(" ")}
+              >
+                {isGithub
+                  ? formatNumber(
+                      activeStats.activeDays
+                    )
+                  : formatNumber(
+                      activeStats.solvedQuestions
+                    )}
+              </p>
+            </div>
+          </div>
+
+          {/* =================================================
+              LIVE DATA
+          ================================================= */}
+
+          <div className="relative z-10 mt-5 flex items-center justify-center gap-2">
+            <span
+              className={[
+                "h-1.5 w-1.5 rounded-full",
+                isGithub
+                  ? "bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]"
+                  : "bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.8)]",
+              ].join(" ")}
+            />
+
+            <span className="text-[9px] uppercase tracking-[0.25em] text-white/25">
+              Live Data
+            </span>
+          </div>
         </div>
       </div>
     </section>
