@@ -222,11 +222,11 @@ function ContributionCalendar({
           MONTH HEADER
       ================================================= */}
 
-      <div className="relative ml-[38px] h-6 w-[calc(100%-38px)]">
+      <div className="relative ml-[38px] h-6">
         {monthLabels.map((month, index) => (
           <span
             key={`${month.name}-${index}`}
-            className="absolute text-[10px] font-medium text-white/35"
+            className="absolute text-[9px] font-medium text-white/35"
             style={{
               left: `${(month.week / 53) * 100}%`,
             }}
@@ -244,38 +244,36 @@ function ContributionCalendar({
         {/* WEEKDAY LABELS */}
 
         <div className="mr-2 flex w-[30px] shrink-0 flex-col justify-between py-[1px]">
-          <span className="text-[9px] text-white/25">
+          <span className="text-[8px] text-white/25">
             Sun
           </span>
 
-          <span className="text-[9px] text-white/25">
+          <span className="text-[8px] text-white/25">
             Mon
           </span>
 
-          <span className="text-[9px] text-white/25">
+          <span className="text-[8px] text-white/25">
             Tue
           </span>
 
-          <span className="text-[9px] text-white/25">
+          <span className="text-[8px] text-white/25">
             Wed
           </span>
 
-          <span className="text-[9px] text-white/25">
+          <span className="text-[8px] text-white/25">
             Thu
           </span>
 
-          <span className="text-[9px] text-white/25">
+          <span className="text-[8px] text-white/25">
             Fri
           </span>
 
-          <span className="text-[9px] text-white/25">
+          <span className="text-[8px] text-white/25">
             Sat
           </span>
         </div>
 
-        {/* =================================================
-            FULL WIDTH CONTRIBUTION GRAPH
-        ================================================= */}
+        {/* FULL WIDTH GRAPH */}
 
         <div className="flex flex-1 justify-between gap-[2px]">
           {calendar.map((week, weekIndex) => (
@@ -292,8 +290,9 @@ function ContributionCalendar({
                     day.count === 1 ? "" : "s"
                   }`}
                   className={[
-                    "h-[10px]",
+                    "aspect-square",
                     "w-full",
+                    "max-h-[13px]",
                     "min-w-[3px]",
                     "shrink-0",
                     "rounded-[2px]",
@@ -319,7 +318,7 @@ function ContributionCalendar({
       ================================================= */}
 
       <div className="mt-3 flex items-center justify-end gap-2">
-        <span className="text-[9px] text-white/25">
+        <span className="text-[8px] text-white/25">
           Less
         </span>
 
@@ -328,8 +327,8 @@ function ContributionCalendar({
             <div
               key={count}
               className={[
-                "h-[10px]",
-                "w-[11px]",
+                "h-[9px]",
+                "w-[10px]",
                 "rounded-[2px]",
                 "border",
                 getLevel(count, platform),
@@ -338,7 +337,7 @@ function ContributionCalendar({
           ))}
         </div>
 
-        <span className="text-[9px] text-white/25">
+        <span className="text-[8px] text-white/25">
           More
         </span>
       </div>
@@ -459,19 +458,19 @@ export default function Contribution() {
   return (
     <section
       id="contributions"
-      className="scroll-mt-28 px-6 py-14 md:py-16"
+      className="scroll-mt-28 px-6 py-12 md:py-14"
     >
       <div className="mx-auto w-full max-w-7xl">
         {/* =================================================
-            MAIN CARD
+            COMPACT SQUARE-STYLE CARD
         ================================================= */}
 
-        <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-transparent p-5 shadow-[0_0_50px_rgba(0,0,0,0.12)] backdrop-blur-xl md:p-7">
+        <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-transparent p-5 shadow-[0_0_50px_rgba(0,0,0,0.12)] backdrop-blur-xl md:p-6">
           {/* TOP GLOW */}
 
           <div
             className={[
-              "pointer-events-none absolute -top-24 left-1/2 h-48 w-96 -translate-x-1/2 rounded-full blur-3xl",
+              "pointer-events-none absolute -top-24 left-1/2 h-44 w-96 -translate-x-1/2 rounded-full blur-3xl",
               isGithub
                 ? "bg-cyan-400/[0.06]"
                 : "bg-green-400/[0.06]",
@@ -482,9 +481,7 @@ export default function Contribution() {
               HEADER
           ================================================= */}
 
-          <div className="relative z-10 flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-            {/* TITLE */}
-
+          <div className="relative z-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <div className="flex items-center gap-3">
                 <div
@@ -503,11 +500,11 @@ export default function Contribution() {
                 </div>
 
                 <div>
-                  <h2 className="text-xl font-semibold tracking-tight text-white md:text-2xl">
+                  <h2 className="text-xl font-semibold tracking-tight text-white">
                     Coding Contributions
                   </h2>
 
-                  <p className="mt-0.5 text-[11px] text-white/35">
+                  <p className="mt-0.5 text-[10px] text-white/35">
                     {isGithub
                       ? "GitHub activity"
                       : "LeetCode activity"}
@@ -516,9 +513,7 @@ export default function Contribution() {
               </div>
             </div>
 
-            {/* =================================================
-                PLATFORM SWITCH
-            ================================================= */}
+            {/* PLATFORM SWITCH */}
 
             <div className="flex w-fit items-center rounded-xl border border-white/[0.08] bg-black/10 p-1 backdrop-blur-md">
               <button
@@ -526,7 +521,7 @@ export default function Contribution() {
                   setActivePlatform("github")
                 }
                 className={[
-                  "flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-medium transition-all duration-200",
+                  "flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-[11px] font-medium transition-all duration-200",
                   activePlatform === "github"
                     ? "bg-cyan-400/10 text-cyan-300 shadow-[0_0_20px_rgba(34,211,238,0.08)]"
                     : "text-white/35 hover:text-white/70",
@@ -541,7 +536,7 @@ export default function Contribution() {
                   setActivePlatform("leetcode")
                 }
                 className={[
-                  "flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-medium transition-all duration-200",
+                  "flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-[11px] font-medium transition-all duration-200",
                   activePlatform === "leetcode"
                     ? "bg-green-400/10 text-green-300 shadow-[0_0_20px_rgba(74,222,128,0.08)]"
                     : "text-white/35 hover:text-white/70",
@@ -558,7 +553,7 @@ export default function Contribution() {
           ================================================= */}
 
           {error && (
-            <div className="relative z-10 mt-5 rounded-xl border border-red-400/10 bg-red-400/[0.04] px-4 py-3 text-xs text-red-300/70">
+            <div className="relative z-10 mt-4 rounded-xl border border-red-400/10 bg-red-400/[0.04] px-4 py-2.5 text-xs text-red-300/70">
               {error}
             </div>
           )}
@@ -567,7 +562,7 @@ export default function Contribution() {
               GRAPH
           ================================================= */}
 
-          <div className="relative z-10 mt-7 w-full rounded-2xl border border-white/[0.06] bg-black/[0.08] p-4 backdrop-blur-md md:p-5">
+          <div className="relative z-10 mt-6 w-full rounded-2xl border border-white/[0.06] bg-black/[0.08] p-4 backdrop-blur-md md:p-5">
             {loading ? (
               <div className="flex h-[105px] items-center justify-center">
                 <div className="flex items-center gap-2 text-xs text-white/30">
@@ -595,17 +590,17 @@ export default function Contribution() {
               STATS
           ================================================= */}
 
-          <div className="relative z-10 mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="relative z-10 mt-4 grid grid-cols-1 gap-2.5 sm:grid-cols-3">
             {/* STAT 1 */}
 
             <div className="rounded-xl border border-white/[0.06] bg-black/[0.08] px-4 py-3 backdrop-blur-md">
-              <p className="text-[9px] uppercase tracking-[0.18em] text-white/25">
+              <p className="text-[8px] uppercase tracking-[0.18em] text-white/25">
                 Day Streak
               </p>
 
               <p
                 className={[
-                  "mt-1 text-lg font-semibold",
+                  "mt-1 text-base font-semibold",
                   isGithub
                     ? "text-cyan-300"
                     : "text-green-300",
@@ -620,7 +615,7 @@ export default function Contribution() {
             {/* STAT 2 */}
 
             <div className="rounded-xl border border-white/[0.06] bg-black/[0.08] px-4 py-3 backdrop-blur-md">
-              <p className="text-[9px] uppercase tracking-[0.18em] text-white/25">
+              <p className="text-[8px] uppercase tracking-[0.18em] text-white/25">
                 {isGithub
                   ? "Total Contributions"
                   : "Global Rank"}
@@ -628,7 +623,7 @@ export default function Contribution() {
 
               <p
                 className={[
-                  "mt-1 text-lg font-semibold",
+                  "mt-1 text-base font-semibold",
                   isGithub
                     ? "text-cyan-300"
                     : "text-green-300",
@@ -645,7 +640,7 @@ export default function Contribution() {
             {/* STAT 3 */}
 
             <div className="rounded-xl border border-white/[0.06] bg-black/[0.08] px-4 py-3 backdrop-blur-md">
-              <p className="text-[9px] uppercase tracking-[0.18em] text-white/25">
+              <p className="text-[8px] uppercase tracking-[0.18em] text-white/25">
                 {isGithub
                   ? "Active Days"
                   : "Total Questions"}
@@ -653,7 +648,7 @@ export default function Contribution() {
 
               <p
                 className={[
-                  "mt-1 text-lg font-semibold",
+                  "mt-1 text-base font-semibold",
                   isGithub
                     ? "text-cyan-300"
                     : "text-green-300",
@@ -674,7 +669,7 @@ export default function Contribution() {
               LIVE DATA
           ================================================= */}
 
-          <div className="relative z-10 mt-5 flex items-center justify-center gap-2">
+          <div className="relative z-10 mt-4 flex items-center justify-center gap-2">
             <span
               className={[
                 "h-1.5 w-1.5 rounded-full",
@@ -684,7 +679,7 @@ export default function Contribution() {
               ].join(" ")}
             />
 
-            <span className="text-[9px] uppercase tracking-[0.25em] text-white/25">
+            <span className="text-[8px] uppercase tracking-[0.25em] text-white/25">
               Live Data
             </span>
           </div>
